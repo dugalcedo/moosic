@@ -1,0 +1,41 @@
+html, body {
+    min-height: 100vh;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+body > * > * {
+    width: 1200px;
+    margin: auto;
+    max-width: 100%;
+    padding: .5rem;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+}
+
+#header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+nav {
+    display: flex;
+    & a {
+        display: block;
+        padding: 1rem;
+    }
+}
+
+main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+main > * {
+    flex-grow: 1;
+}

@@ -1,0 +1,36 @@
+#collection {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .5rem;
+
+    & .item {
+        border: 1px solid gray;
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+
+        & .cover {
+            & img {
+                width: 100%;
+            }
+        }
+
+        & .info {
+            padding: .5rem;
+
+            & .head {
+                display: flex;
+                align-items: center;
+
+                & .title {
+                    & h3 {
+                        font-style: italic;
+                    }
+                }
+
+                & .spacer {
+                    flex-grow: 1;
+                }
+            }
+        }
+    }
+}
