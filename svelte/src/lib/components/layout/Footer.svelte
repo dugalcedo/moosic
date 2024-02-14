@@ -1,5 +1,5 @@
 <footer>
     <div id="footer">
-        <a href="https://www.flaticon.com/free-icons/moose" title="moose icons" target="_blank">Moose icons created by Freepik - Flaticon</a>
+        <a href="https://www.flaticon.com/free-icons/moose" title="moose icons">Moose icons created by microstd - Flaticon</a>
     </div>
 </footer>

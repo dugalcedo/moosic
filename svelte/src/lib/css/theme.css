@@ -1,0 +1,82 @@
+@font-face {
+    font-family: "Simply Sans Bold";
+    src: url("/fonts/SimplySans-Bold.ttf");
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Simply Sans Bold";
+    src: url("/fonts/SimplySans-BoldItalic.ttf");
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Simply Sans Book";
+    src: url("/fonts/SimplySans-Book.ttf");
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Simply Sans Book";
+    src: url("/fonts/SimplySans-BookItalic.ttf");
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Qaz";
+    src: url("/fonts/Qaz-Regular.ttf");
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Qaz";
+    src: url("/fonts/Qaz-Italic.ttf");
+    font-style: italic;
+}
+
+body, input, button {
+    font-family: "Qaz", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Simply Sans Bold", sans-serif;
+}
+
+body {
+    --bg-rgb: 25, 25, 25;
+    --bg: rgb(var(--bg-rgb));
+
+    --tx-rgb: 200, 200, 200;
+    --tx: rgb(var(--tx-rgb));
+
+    --off-tx: rgba(var(--tx-rgb), 0.33);
+
+    --hl-rgb: 56, 223, 120;
+    --hl: rgb(var(--hl-rgb));
+
+    & .invert, & button:not(.invert) {
+        background-color: var(--tx);
+        color: var(--bg);
+
+        & button {
+            background-color: var(--bg);
+            color: var(--tx);
+        }
+    }
+}
+
+button {
+    border: 0;
+    padding: .5rem;
+
+    &:hover {
+        filter: brightness(1.2);
+    }
+}
+
+a.premium {
+    opacity: .5;
+    &::after {
+        content: "*";
+    }
+}

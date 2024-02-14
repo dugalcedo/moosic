@@ -1,10 +1,13 @@
 html, body {
-    min-height: 100vh;
+    height: 100vh;
+    /* overflow-y: hidden; */
 }
 
 body {
     display: flex;
     flex-direction: column;
+    background-color: var(--bg);
+    color: var(--tx);
 }
 
 body > * > * {
@@ -12,8 +15,8 @@ body > * > * {
     margin: auto;
     max-width: 100%;
     padding: .5rem;
-    border-left: 1px solid gray;
-    border-right: 1px solid gray;
+    border-left: 1px solid var(--off-tx);
+    border-right: 1px solid var(--off-tx);
 }
 
 #header {
@@ -34,6 +37,7 @@ main {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    /* overflow-y: auto; */
 }
 
 main > * {

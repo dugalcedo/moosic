@@ -10,21 +10,23 @@
 
 <Modal id="delete">
     <div slot="head">
-        deleting album
+        <h3>deleting album</h3>
     </div>
     <div slot="body">
         are you sure you want to permanently delete <i>{album.album}</i> by <b>{album.artist}</b>?
     </div>
     <div slot="foot">
         <button on:click={async ()=>{
-            
-            // premium
-            return
             const reply = await hämta({
                 endpoint: backendURL('/api/collection'),
                 method: 'DELETE',
-                body: album
+                body: {id: album.id}
             })
+            if (reply.error) {
+                console.log(reply)
+                return
+            }
+            location.href = '/'
         }}>
             delete permanently
         </button>

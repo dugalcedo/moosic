@@ -1,39 +1,45 @@
 <script>
+    import store from "../../store";
     import Modal from "../layout/Modal.svelte";
     import Form from "../forms/Form.svelte";
-    import { backendURL, hämta } from "../..";
 
-    let submitBtn
+    let editBtn
+
 </script>
 
-<Modal id='add'>
+<Modal id="edit">
     <div slot="head">
-        <h3>add new album</h3>
+        <h3>editing <i>{$store.albumToEdit.album}</i> by <b>{$store.albumToEdit.artist}</b></h3>
     </div>
     <div slot="body">
         <Form
-            refer={submitBtn}
+            refer={editBtn}
             fields={[
                 {
                     placeholder: 'artist',
-                    required: true
+                    required: true,
+                    value: $store.albumToEdit.artist
                 },
                 {
                     placeholder: 'album',
-                    required: true
+                    required: true,
+                    value: $store.albumToEdit.album
                 },
                 {
                     placeholder: 'length',
                     name: 'len',
-                    required: true
+                    required: true,
+                    value: $store.albumToEdit.len
                 },
                 {
                     placeholder: 'year',
-                    required: true
+                    required: true,
+                    value: $store.albumToEdit.year
                 },
                 {
                     placeholder: 'rating',
-                    required: true
+                    required: true,
+                    value: $store.albumToEdit.rating
                 },
                 {
                     label: 'familiarity',
@@ -45,33 +51,21 @@
                         'somewhat familiar',
                         'familiar',
                         'very familiar'
-                    ]
+                    ],
+                    selected: $store.albumToEdit.fam
                 },
                 {
                     label: 'tags',
                     name: 'tags',
-                    type: 'textarea'
+                    type: 'textarea',
+                    value: $store.albumToEdit.tags.join(' ')
                 }
             ]}
-            handler={async (data) => {
-                data.tags = data.tags.split(' ').map(t=>t)
-                const reply = await hämta({
-                    endpoint: backendURL('/api/collection'),
-                    method: 'POST',
-                    body: data
-                })
-                if (reply.error) {
-                    alert('Something went wrong')
-                } else {
-                    location.reload()
-                }
-                return reply
-            }}
         />
     </div>
     <div slot="foot">
-        <button bind:this={submitBtn}>
-            add
+        <button bind:this={editBtn}>
+            save changes
         </button>
     </div>
 </Modal>

@@ -1,14 +1,7 @@
 import db from "../db/db.js"
-import { Model, DataTypes } from "sequelize"
+import { Model, DataTypes, fn } from "sequelize"
 import validator from 'validator'
 import bcrypt from 'bcrypt'
-import {
-    parseCollection,
-    compressCollection,
-    addToCollection,
-    updateInCollection,
-    deleteFromCollection
-} from './Collection.js'
 
 class UserModel extends Model {
     static keyChars = "1234567890qwertyuiopasdfghjklzxcvbnm"
@@ -23,38 +16,6 @@ class UserModel extends Model {
 
     checkPassword(password) {
         return bcrypt.compareSync(password, this.password)
-    }
-
-    getCollection(sortKey = 'rating', sortMethod = 'numeric', sortDirection = 'desc') {
-        let collection = parseCollection(this.collection)
-        collection.sort((a, b) => {
-            return  sortMethod === 'numeric' ?
-                        sortDirection === 'desc' ?
-                            b[sortKey] - a[sortKey] :
-                            a[sortKey] - b[sortKey] :
-                        sortDirection === 'desc' ?
-                            b[sortKey].localeCompare(a[sortKey]) :
-                            b[sortKey].localeCompare(a[sortKey])
-        })
-        return collection
-    }
-
-    async addToCollection(newItem) {
-        this.collection = addToCollection(this.collection, newItem)
-        await this.save()
-        return this.getCollection()
-    }
-
-    async updateInCollection(id, newItem) {
-        this.collection = updateInCollection(this.collection, id, newItem)
-        await this.save()
-        return this.getCollection()
-    }
-
-    async deleteFromCollection(id) {
-        this.collection = deleteFromCollection(this.collection, id)
-        await this.save()
-        return
     }
 }
 
@@ -100,11 +61,6 @@ UserModel.init({
             this.setDataValue('password', bcrypt.hashSync(val, 5))
         }
     },
-    collection: {
-        type: DataTypes.STRING,
-        notNull: true,
-        defaultValue: ""
-    },
     role: {
         type: DataTypes.ENUM(
             'unverified',
@@ -113,12 +69,11 @@ UserModel.init({
             'mod',
             'admin'
         ),
-        notNull: true,
+        allowNull: false,
         defaultValue: 'unverified'
     },
     loginKey: {
-        type: DataTypes.STRING,
-        notNull: true
+        type: DataTypes.STRING
     }
 }, {
     modelName: 'user',

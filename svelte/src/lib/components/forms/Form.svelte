@@ -2,10 +2,14 @@
     import RadioInput from "../inputs/RadioInput.svelte";
 
     export let fields
+    if (!fields) {
+        console.warn('Missing form fields')
+    }
     export let submitBtn = 'submit'
     export let handler = null
-    export let refer
+    export let refer = null
 
+    let submitting = false
     let form
 
     $: if (refer && form) {
@@ -35,10 +39,15 @@
     })
 
     async function handleSubmit(e) {
+        if (submitting) return
         e.preventDefault()
+        submitting = true
         errors = []
         fetchError = ""
-        if (!handler) return
+        if (!handler) {
+            submitting = false
+            return
+        }
         const data = Object.fromEntries(new FormData(e.target))
 
         fields.forEach(field => {
@@ -48,12 +57,17 @@
         })
 
         errors = [...errors]
-        if (errors.some(e => e)) return
+        if (errors.some(e => e)) {
+            submitting = false
+            return
+        }
 
         let reply = await handler(data, e.target)
         if (reply.error) {
             fetchError = "Server side error: " + reply.message
         }
+
+        submitting = false
     }
 
 </script>
@@ -70,20 +84,23 @@
                     <input type="text"
                         placeholder={field.placeholder}
                         name={field.name||field.placeholder}
+                        value={field.value||""}
                     >
                 {:else if field.type === 'email'}
                     <input
                         type="email"
                         placeholder={field.placeholder}
                         name={field.name||field.placeholder}
+                        value={field.value||""}
                     >
                 {:else if field.type === 'textarea'}
-                    <textarea name={field.name||field.placeholder} style="resize:none;"></textarea>
+                    <textarea name={field.name||field.placeholder} style="resize:none;">{field.value||""}</textarea>
                 {:else if field.type === 'password'}
                     <input
                         type="password"
                         placeholder={field.placeholder}
                         name={field.name||field.placeholder}
+                        value={field.value||""}
                     >
                 {:else if field.type === 'radio'}
                     <RadioInput {field} />

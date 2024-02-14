@@ -9,17 +9,12 @@ const authController = Router()
 
 authController.use(async (req, res, next) => {
 
-    // tokens
-    req.jwt = {}
-    req.jwt.sign = payload => jwt.sign(payload, process.env.SECRET, {expiresIn: '2w'})
-    req.jwt.verify = token => jwt.verify(token, process.env.SECRET)
-
-    // const token = req.cookies['token']
     const token = req.headers['moosic-token']
+    console.log("TOKEN: ", token)
 
-    if (token !== 'null') {
+    if (token !== 'null' && token != null && token !== undefined) {
         req.user = await UserModel.findOne({
-            where: { username: req.jwt.verify(token).username }
+            where: { username: req.jwtVerify(token).username }
         })
         if (req.user) {
             console.log(`User logged in via token: ${req.user.username}`)

@@ -13,6 +13,12 @@
         <nav>
             {#if $store.user}
                 <ModalLink id="add">add album</ModalLink>
+                <ModalLink 
+                    id="rymport" 
+                    roleCheck={['premium', 'admin', 'mod']}
+                >
+                    import from RYM
+                </ModalLink>
                 <A href="/logout">log out</A>
             {:else}
                 <A href="/login">log in</A>

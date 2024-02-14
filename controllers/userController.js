@@ -19,7 +19,7 @@ userController.post('/register', async (req, res) => {
             subject: "Welcome to Moosic!",
             text: `Here is your first-time login key: ${req.body.loginKey}`
         })
-        res.json({ error: false, newUser, token: req.jwt.sign(userData) })
+        res.json({ error: false, newUser, token: req.jwtSign(userData) })
     } catch (error) {
         console.log(`Error creating user`)
         console.log(error)
@@ -58,7 +58,7 @@ userController.post('/login', async (req, res) => {
         }
 
         const userData = {...match.dataValues}
-        const token = req.jwt.sign(userData)
+        const token = req.jwtSign(userData)
         delete userData.password
 
         res.json({ error: false, token, userData })
@@ -79,14 +79,16 @@ userController.put('/verify', async (req, res) => {
     } 
 })
 
-userController.get('/', (req, res) => {
-    // console.log('User: ', req.user)
+userController.get('/', async (req, res) => {
+    if (!req.user) {
+        res.json({userData: {}})
+        return
+    }
     try {
         const userData = {...(req.user?.dataValues||{})}
         delete userData.password
         delete userData.loginKey
-        userData.collection = req.user.getCollection()
-        // console.log(userData)
+        userData.collection = await req.user.getCollection()
         res.json(userData)
     } catch (error) {
         console.log(error)

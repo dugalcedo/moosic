@@ -1,50 +1,53 @@
 import { Router } from "express"
-
+import AlbumModel from "../models/AlbumModel.js"
+import UserAlbum from "../models/UserAlbum.js"
+import roleCheck from "./middleware/roleCheck.js"
 const collectionController = Router()
 
 /*
     /api/collection
 */
 
-collectionController.get('/', (req, res) => {
-    if (!req.user) {
-        res.json([])
-    } else {
-        const collection = req.user.getCollection()
-        res.json(collection)
+// add one
+collectionController.post('/', async (req, res) => {
+    let album
+    try {
+        album = await AlbumModel.add(req.body)
+    } catch (error) {
+        console.log("Error creating album at POST/api/collection")
+        console.log(error)
+        res.json({error: true})
+        return
+    }
+    try {
+        const newUserAlbum = await UserAlbum.add(req.user.id, req.body)
+        res.json(newUserAlbum.dataValues)
+    } catch (error) {
+        res.throw({req, error, message: "Error posting userAlbum"})
     }
 })
 
-collectionController.post('/', async (req, res) => {
+// add many
+collectionController.post('/many', roleCheck(['premium', 'mod', 'admin']), async (req, res) => {
     try {
-        const newCollection = await req.user.addToCollection(req.body)
-        res.json({ error: false, collection: newCollection })
+        const albums = await AlbumModel.addMany(req.body)
+        const userAlbums = await UserAlbum.addMany(req.user.id, albums)
+        res.json({albums, userAlbums})
     } catch (error) {
-        console.log("Failed adding album")
-        console.log(error)
-        res.json({ error: true })
+        res.throw({req, error, message: "Error posting many userAlbums"})
     }
 })
 
 collectionController.put('/', async (req, res) => {
-    try {
-        const newCollection = await req.user.updateInCollection(req.body.id, req.body)
-        res.json({ error: false, update: req.body})
-    } catch (error) {
-        console.log("Failed editing album")
-        console.log(error)
-        res.json({ error: true })
-    }
+
 })
 
 collectionController.delete('/', async (req, res) => {
     try {
-        await req.user.deleteFromCollection(req.body.id)
-        res.json({ error: false })
+        await UserAlbum.destroy({ where: {id: req.body.id}})
+        res.json({})
     } catch (error) {
-        console.log("Failed deleting album")
-        console.log(error)
-        res.json({ error: true })
+        res.throw({req, error, message: "Error destroying album"})
     }
 })
 

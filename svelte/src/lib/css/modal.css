@@ -8,26 +8,44 @@
 }
 
 .modal {
-    background-color: gray;
     position: fixed;
     top: 25%;
     left: 50%;
-    height: 50vh;
+    max-height: 50vh;
     transform: translateX(-50%);
-    width: 800px;
+    width: 500px;
     max-width: 95%;
     box-shadow: 5px 5px 0 rgba(0,0,0,0.2);
     display: flex;
     flex-direction: column;
 
+    padding: 0;
+
     & > .head {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        flex-direction: row-reverse;
+        position: relative;
+
+        & button {
+            font-size: 150%;
+            position: relative;
+            right: -1px;
+        }
+
+        & div[slot="head"] {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+        }
     }
 
     & > .body {
         flex-grow: 1;
         overflow-y: auto;
+        padding: 1rem;
+    }
+
+    & > .foot {
+        text-align: center;
     }
 }

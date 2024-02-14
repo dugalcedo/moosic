@@ -4,24 +4,36 @@
     gap: .5rem;
 
     & .item {
-        border: 1px solid gray;
+        border: 1px solid var(--off-tx);
         display: grid;
-        grid-template-columns: 1fr 2fr;
+        grid-template-columns: 1fr 4fr;
 
         & .cover {
+            position: relative;
+            & .rank {
+                position: absolute;
+                background-color: var(--hl);
+                color: var(--bg);
+                padding: .25rem;
+                font-weight: 900;
+                top: 0;
+            }
             & img {
                 width: 100%;
             }
         }
 
         & .info {
-            padding: .5rem;
+            display: flex;
+            flex-direction: column;
 
             & .head {
                 display: flex;
-                align-items: center;
+                border-bottom: 1px solid var(--bg);
 
                 & .title {
+                    padding-left: .25rem;
+                    padding-bottom: .25rem;
                     & h3 {
                         font-style: italic;
                     }
@@ -29,6 +41,21 @@
 
                 & .spacer {
                     flex-grow: 1;
+                }
+
+                & .buttons {
+                    display: flex;
+                }
+            }
+
+            & .body {
+                flex-grow: 1;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                align-items: center;
+
+                & > * {
+                    text-align: center;
                 }
             }
         }

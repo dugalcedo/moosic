@@ -8,26 +8,15 @@
     import Modals from "./lib/components/layout/Modals.svelte";
     let storeLoaded = false
 
-    getUser()
-    async function getUser() {
-      const localUser = localStorage.getItem('moosic-user')
-      if (!localUser) {
-        const u = await hämta({endpoint: backendURL('/api/user')})
-        if (u.id && u.username && u.email) {
-            $store.user = u
-            localStorage.setItem('moosic-user', JSON.stringify(u))
-        }
-      } else {
-        try {
-          $store.user = JSON.parse(localUser)
-        } catch (error) {
-          localStorage.removeItem('moosic-user')
-          getUser()
-        }
-      }
-    }
-
-
+    // getUser()
+    // async function getUser() {
+    //   const u = await hämta({endpoint: backendURL('/api/user')})
+    //   if (u.id && u.username && u.email) {
+    //       $store.user = u
+    //       localStorage.setItem('moosic-user', JSON.stringify(u))
+    //   }
+    // }
+    $store.load()
 
     $: if ($store) {
       console.log(`store ${storeLoaded?'change':'init'}`, $store)
